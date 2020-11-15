@@ -1,5 +1,7 @@
 function generateReadme(userAnswers) {
 
+  
+
   // Generate Table of Contents conditionally based on userAnswers
   let draftToC = `## Table of Contents`;
 
@@ -23,7 +25,8 @@ function generateReadme(userAnswers) {
   
   Check out the badges hosted by [shields.io](https://shields.io/).
   
-  
+  ![shields.io](https://img.shields.io/badge/${userAnswers.language}-${userAnswers.percentage}%25-success)
+
   ## Description 
   
   *The what, why, and how:* 
@@ -110,20 +113,18 @@ function generateReadme(userAnswers) {
   ---
   
   ## Questions?
-  
-  ![Developer Profile Picture](${userInfo.avatar_url}) 
-  
+    
   For any questions, please contact me with the information below:
  
-  GitHub: [@${userInfo.login}](${userInfo.url})
+  GitHub: [@${userAnswers.username}](${userAnswers.url})
   `;
 
   // If GitHub email is not null, add to Developer section
-  if (userInfo.email !== null) {
+  if (userAnswers.email !== null) {
   
   draftDev +=
   `
-  Email: ${userInfo.email}
+  Email: ${userAnswers.email}
   `};
 
   // Add developer section to markdown

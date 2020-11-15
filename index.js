@@ -13,6 +13,7 @@ const licenseBadgeLinks = {
 
 // Internal modules
 const generateReadme = require('./utils/generateReadme.js');
+const { get } = require('http');
 
 // Prompts for user answers
 const questions = [
@@ -62,7 +63,7 @@ const questions = [
         message: "If applicable, provide any tests written for your application and provide examples on how to run them.",
         name: 'tests'
     },
-        {
+    {
         type: 'list',
         message: "Choose a license for your project.",
         choices: ['Mozilla Public License 2.0', 'Apache License 2.0', 'MIT License', 'ISC License (ISC)', 'The Unlicense'],
@@ -73,7 +74,6 @@ const questions = [
         type: 'input',
         message: "What is your GitHub username? (No @ needed)",
         name: 'username',
-        default: 'gflunky',
         validate: function (answer) {
             if (answer.length < 1) {
                 return console.log("A valid GitHub username is required.");
@@ -81,8 +81,19 @@ const questions = [
             return true;
         }
     },
+    {
+        type: 'input',
+        message: "What is your GitHub repo name? (Must be exact)",
+        name: 'reponame',
+        validate: function (answer) {
+            if (answer.length < 1) {
+                return console.log("A valid GitHub reponame is required.");
+            }
+            return true;
+        }
+    },
 
-        {
+    {
         type: 'input',
         message: "What is your email address?",
         name: 'email',
@@ -107,10 +118,10 @@ function writeToFile(fileName, data) {
     });
 }
 
-const writeFileAsync = util.promisify(writeToFile);
+/* const writeFileAsync = util.promisify(writeToFile); */
 
 // The main function - it will wait for answers before preceding.
-async function init() {
+/* async function init() {
     try {
 
         // Prompt Inquirer questions
@@ -119,7 +130,7 @@ async function init() {
     
         // Pass the answers to generateReadme
         console.log("Generating README...")
-        const readme = generateReadMe(userAnswers);
+        const readme = generateReadme(userAnswers);
         console.log(readme);
     
         // Write markdown to file
@@ -128,6 +139,25 @@ async function init() {
     } catch (error) {
         console.log(error);
     }
-};
+}; */
+
+async function getLang (repoLang) {
+    const url = "https://api.github.com/repos/drclever/Weather-Dashboard/languages";
+    const response = await fetch(url);
+    const result = await response.json();
+    repoLang = Object.keys(result);
+    console.log(repoLang);
+}
+
+function init() {
+    inquirer.prompt(questions)
+    .then(function(data) {
+        writeToFile(`${questions.title}.md`, generateReadme(data));
+        // writeToFile("README.md", generateReadme(data))
+    })
+    .catch(err => {
+        throw err
+    })
+}
 
 init();
