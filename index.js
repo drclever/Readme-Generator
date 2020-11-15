@@ -1,5 +1,6 @@
 // External packages
 const inquirer = require('inquirer');
+const axios = require('axios');
 const util = require('util');
 const fs = require('fs');
 
@@ -142,17 +143,45 @@ function writeToFile(fileName, data) {
 }; */
 
 async function getLang (repoLang) {
-    const url = "https://api.github.com/repos/drclever/Weather-Dashboard/languages";
-    const response = await fetch(url);
-    const result = await response.json();
+/*     const url = "https://api.github.com/repos/drclever/Weather-Dashboard/languages";
+    const response = await fetch(url); */
+    const queryUrl = "https://api.github.com/repos/drclever/Weather-Dashboard/languages";
+
+    try {
+        // fetch data from a url endpoint
+        const response = await axios.get(queryUrl);
+        console.log(response.data)
+
+        //make an Object of the languages returned
+        repoLang = Object.keys(response.data);
+        console.log(repoLang);
+    
+        return repoLang;
+      } catch (error) {
+        console.log(error);
+      }
+    //make an Object of the languages returned
+/*     const result = await response.json();
     repoLang = Object.keys(result);
-    console.log(repoLang);
+    console.log(repoLang); */
+
+/*     axios.get(queryUrl)
+    .then((response)=>{
+        //make an Object of the languages returned
+        let repoLang = ""
+        const result = await response.json();
+        repoLang = Object.keys(result);
+        console.log(repoLang);
+
+      }); */ 
 }
 
 function init() {
     inquirer.prompt(questions)
     .then(function(data) {
-        writeToFile(`${questions.title}.md`, generateReadme(data));
+        let repoLang = [];
+        getLang(repoLang);
+        writeToFile(`${questions.title}.md`, generateReadme(data, repoLang));
         // writeToFile("README.md", generateReadme(data))
     })
     .catch(err => {

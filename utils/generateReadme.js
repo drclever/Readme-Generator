@@ -1,7 +1,6 @@
-function generateReadme(userAnswers) {
+function generateReadme(userAnswers, repoLang) {
 
   
-
   // Generate Table of Contents conditionally based on userAnswers
   let draftToC = `## Table of Contents`;
 
