@@ -23,6 +23,42 @@ const generateReadme = require('./utils/generateReadme.js');
 const questions = [
     {
         type: 'input',
+        message: "What is your GitHub username? (No @ needed - Must be valid)",
+        name: 'username',
+        validate: function (answer) {
+            if (answer.length < 1) {
+                return console.log("A valid GitHub username is required.");
+            }
+            return true;
+        }
+    },
+    {
+        type: 'input',
+        message: "What is your GitHub repo name? (Must be exact and be public on GitHub)",
+        name: 'reponame',
+        validate: function (answer) {
+            if (answer.length < 1) {
+                return console.log("A valid GitHub reponame is required.");
+            }
+            return true;
+        }
+    },
+
+    {
+        type: 'input',
+        message: "What is your email address?",
+        name: 'email',
+        default: 'general-flunky@outlook.com',
+        validate: function (answer) {
+            if (answer.length < 1) {
+                return console.log("An email address is required.");
+            }
+            return true;
+        }
+    },
+
+    {
+        type: 'input',
         message: "What is the title of your project?",
         name: 'title',
         default: 'Project Title',
@@ -49,7 +85,7 @@ const questions = [
 
     {
         type: 'input',
-        message: "If applicable, describe the steps required to install your project for the Installation section.",
+        message: "What command should be run to install dependencies?",
         name: 'installation'
     },
     {
@@ -59,7 +95,7 @@ const questions = [
     },
     {
         type: 'input',
-        message: "If applicable, provide guidelines on how other developers can contribute to your project.",
+        message: "Provide guidelines on how other developers can contribute to your project.",
         name: 'contributing'
     },
     {
@@ -72,60 +108,26 @@ const questions = [
         message: "Choose a license for your project.",
         choices: ['Mozilla Public License 2.0', 'Apache License 2.0', 'MIT License', 'ISC License (ISC)', 'The Unlicense'],
         name: 'license'
-    },
-
-    {
-        type: 'input',
-        message: "What is your GitHub username? (No @ needed)",
-        name: 'username',
-        validate: function (answer) {
-            if (answer.length < 1) {
-                return console.log("A valid GitHub username is required.");
-            }
-            return true;
-        }
-    },
-    {
-        type: 'input',
-        message: "What is your GitHub repo name? (Must be exact)",
-        name: 'reponame',
-        validate: function (answer) {
-            if (answer.length < 1) {
-                return console.log("A valid GitHub reponame is required.");
-            }
-            return true;
-        }
-    },
-
-    {
-        type: 'input',
-        message: "What is your email address?",
-        name: 'email',
-        default: 'general-flunky@outlook.com',
-        validate: function (answer) {
-            if (answer.length < 1) {
-                return console.log("An email address is required.");
-            }
-            return true;
-        }
     }
+
+
 ];
 
-//Write the file function
-function writeToFile(fileName, data) {
-    fs.writeFile(fileName, data, err => {
-        if (err) {
-          return console.log(err);
-        }
+// //Write the file function
+// function writeToFile(fileName, data) {
+//     fs.writeFile(fileName, data, err => {
+//         if (err) {
+//           return console.log(err);
+//         }
       
-        console.log("Success! Your README.md file has been generated")
-    });
-}
+//         console.log("Success! Your README.md file has been generated")
+//     });
+// }
 
-async function getLang (repoLang) {
+async function getLang (userAnswers, repoLang) {
     /*     const url = "https://api.github.com/repos/drclever/Weather-Dashboard/languages";
         const response = await fetch(url); */
-        const queryUrl = "https://api.github.com/repos/drclever/Weather-Dashboard/languages";
+        const queryUrl = `https://api.github.com/repos/${userAnswers.username}/${userAnswers.reponame}/languages`;
         
     
         try {
@@ -137,7 +139,8 @@ async function getLang (repoLang) {
         
             return repoLang;
           } catch (error) {
-            console.log(error);
+            console.log(`Not able to retrieve data for url ${queryUrl}.  Please try again.`);
+            throw error;
           } 
     }
 
@@ -148,17 +151,19 @@ async function init() {
         const userAnswers = await inquirer.prompt(questions);
         userAnswers.licenseBadge = licenseBadgeLinks[userAnswers.license];
 
+        // Call GitHub and determine the languages used in your repo.
         repoLang = await getLang(userAnswers, repoLang);
     
         // Pass the answers to generateReadme
         console.log("Generating README...")
-        const readme = generateReadme(userAnswers, repoLang);
+        const readme = await generateReadme(userAnswers, repoLang);
     
         // Write markdown to file
         await writeFileAsync(`${userAnswers.reponame}-README.md`, readme);
+        console.log(`Your ${userAnswers.reponame}-README.md file has been generated.  Please rename your file to README.md when you are ready.`)
 
     } catch (error) {
-        console.log(error);
+        console.log("The readme file was not created.");
     }
 };
 
