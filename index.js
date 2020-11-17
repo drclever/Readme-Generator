@@ -3,7 +3,7 @@ const inquirer = require('inquirer');
 const axios = require('axios');
 const util = require('util');
 const fs = require('fs');
-// set the fs.writeFile function to use promises
+// Set the fs.writeFile function to use promises
 const writeFileAsync = util.promisify(fs.writeFile);
 
 let repoLang = [];
@@ -18,7 +18,6 @@ const licenseBadgeLinks = {
 
 // Internal modules
 const generateReadme = require('./utils/generateReadme.js');
-// const { get } = require('http');
 
 // Prompts for user answers
 const questions = [
@@ -123,29 +122,6 @@ function writeToFile(fileName, data) {
     });
 }
 
-/* async function getLang (data, repoLang) {
-        const queryUrl = `https://api.github.com/repos/${data.username}/${data.reponame}/languages`;
-        console.log(queryUrl)
-    
-            // fetch data from a url endpoint
-        axios.get(queryUrl)
-        .then(function(response){
-            console.log("Returned from axios", response.data)
-            repoLang = Object.keys(response.data);
-            console.log("repoLang", repoLang);
-        
-            return repoLang
-        })
-        .catch(err => {
-            console("Axios err ", err)
-            throw err;
-        });
-        
-    
-        //make an Object of the languages returned
-              
-} */
-
 async function getLang (repoLang) {
     /*     const url = "https://api.github.com/repos/drclever/Weather-Dashboard/languages";
         const response = await fetch(url); */
@@ -155,11 +131,9 @@ async function getLang (repoLang) {
         try {
             // fetch data from a url endpoint
             const response = await axios.get(queryUrl);
-            console.log(response.data)
     
             //make an Object of the languages returned
             repoLang = Object.keys(response.data);
-            console.log("repoLang", repoLang);
         
             return repoLang;
           } catch (error) {
@@ -173,41 +147,19 @@ async function init() {
         // Prompt Inquirer questions
         const userAnswers = await inquirer.prompt(questions);
         userAnswers.licenseBadge = licenseBadgeLinks[userAnswers.license];
-        console.log("Your answers: ", userAnswers);
 
         repoLang = await getLang(userAnswers, repoLang);
-        console.log("Your repoLang: ", repoLang);
     
         // Pass the answers to generateReadme
         console.log("Generating README...")
         const readme = generateReadme(userAnswers, repoLang);
-        // console.log(readme);
     
         // Write markdown to file
-        await writeFileAsync(`${userAnswers.title}.md`, readme);
+        await writeFileAsync(`${userAnswers.reponame}-README.md`, readme);
 
     } catch (error) {
         console.log(error);
     }
 };
-
-/* function init() {
-   
-    inquirer.prompt(questions)
-    .then(function(data) {
-        console.log(data)
-        console.log(data.license)
-        data.licenseBadge = licenseBadgeLinks[data.license];
-        console.log(data.licenseBadge)
-        console.log(data)
-        getLang(data, repoLang)
-        console.log("repoLang1", repoLang);
-        writeFileAsync(`${data.title}.md`, generateReadme(data, repoLang));
-        console.log("Finished")
-    })
-    .catch(err => {
-        throw err
-    });
-} */
 
 init();
