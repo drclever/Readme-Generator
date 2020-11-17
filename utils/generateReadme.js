@@ -1,7 +1,7 @@
 
 
 // function to generate markdown for README
-function generateReadme(data, repoLang) {
+async function generateReadme(data, repoLang) {
 
     //Build the logic for the Top Language Badges for the repo
     let newBadge = "";
@@ -9,8 +9,6 @@ function generateReadme(data, repoLang) {
     for (let i = 0; i < repoLang.length; i++) {
         newBadge += "![Badge for GitHub repo top language(s)](https://img.shields.io/badge/-" + repoLang[i] + "-blue)  ";
     }
-
-    console.log("This is newBadge", newBadge)
 
     // return markdown content
     return `# ${data.title}
@@ -47,7 +45,8 @@ ${data.usage}
 
 ## License
 
-This repository is licensed under the ${data.license} license. ${data.licenseBadge}
+${data.licenseBadge}
+This repository is licensed under the ${data.license} license.
 
 
 ## Contributing
