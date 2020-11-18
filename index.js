@@ -22,6 +22,12 @@ const generateReadme = require('./utils/generateReadme.js');
 // Prompts for user answers
 const questions = [
     {
+        type: 'confirm',
+        message: "Do you wish to access github and get top language information? (Username must be exact and repo is public - y/N)",
+        name: 'showrepobadge',
+        default: false,
+    },
+    {
         type: 'input',
         message: "What is your GitHub username? (No @ needed - Must be valid)",
         name: 'username',
@@ -152,7 +158,10 @@ async function init() {
         userAnswers.licenseBadge = licenseBadgeLinks[userAnswers.license];
 
         // Call GitHub and determine the languages used in your repo.
-        repoLang = await getLang(userAnswers, repoLang);
+        if (userAnswers.showrepobadge) {
+            console.log("I am here")
+            repoLang = await getLang(userAnswers, repoLang);
+        }
     
         // Pass the answers to generateReadme
         console.log("Generating README...")
@@ -163,6 +172,7 @@ async function init() {
         console.log(`Your ${userAnswers.reponame}-README.md file has been generated.  Please rename your file to README.md when you are ready.`)
 
     } catch (error) {
+        console.log(error)
         console.log("The readme file was not created.");
     }
 };
