@@ -45,8 +45,9 @@ ${data.usage}
 
 ## License
 
+
+This repository is licensed under the ${data.license}.
 ${data.licenseBadge}
-This repository is licensed under the ${data.license} license.
 
 
 ## Contributing
