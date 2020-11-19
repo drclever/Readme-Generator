@@ -23,7 +23,7 @@ const generateReadme = require('./utils/generateReadme.js');
 const questions = [
     {
         type: 'confirm',
-        message: "Do you wish to access github and get top language information? (Username must be exact and repo is public - y/N)",
+        message: "Do you wish to access your github repo and get top language information to create repo badges? (Username must be exact and repo is public - y/N)",
         name: 'showrepobadge',
         default: false,
     },
@@ -119,17 +119,6 @@ const questions = [
 
 ];
 
-// //Write the file function
-// function writeToFile(fileName, data) {
-//     fs.writeFile(fileName, data, err => {
-//         if (err) {
-//           return console.log(err);
-//         }
-      
-//         console.log("Success! Your README.md file has been generated")
-//     });
-// }
-
 async function getLang (userAnswers, repoLang) {
     /*     const url = "https://api.github.com/repos/drclever/Weather-Dashboard/languages";
         const response = await fetch(url); */
@@ -159,7 +148,6 @@ async function init() {
 
         // Call GitHub and determine the languages used in your repo.
         if (userAnswers.showrepobadge) {
-            console.log("I am here")
             repoLang = await getLang(userAnswers, repoLang);
         }
     
