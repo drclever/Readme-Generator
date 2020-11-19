@@ -54,7 +54,7 @@ const questions = [
         type: 'input',
         message: "What is your email address?",
         name: 'email',
-        default: 'general-flunky@outlook.com',
+        default: 'fake-email@something.com',
         validate: function (answer) {
             if (answer.length < 1) {
                 return console.log("An email address is required.");
