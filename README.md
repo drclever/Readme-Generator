@@ -38,13 +38,9 @@ npm i
 
 node index.js
 
-### Readme Generator Demonstration
-Gif of the first half of the demonstration  (See Readme-Generator mp4 to download full video)
-
-![Readme-Generator Demonstration](./Readme-Generator.gif)
 
 ### Link to video that you can download
-[Readme-Generator Video Link](./Readme-Generator.mp4)
+[Readme-Generator Video Link](https://drive.google.com/drive/folders/1gDWOajvxyR4BfVlULvKGEXwxw_XOYI0Z?usp=sharinghttps://drive.google.com/drive/folders/1gDWOajvxyR4BfVlULvKGEXwxw_XOYI0Z?usp=sharing)
 
 
 ### Readme Generator Image
