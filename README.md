@@ -42,7 +42,7 @@ When the user runs node index.js, the application uses the inquirer package to p
 
 If user answered yes to the question if he/she wanted to use the Github API to access their repo, the application will take the user's responses and use axios to obtain the top language(s) for the repo to create badges. From there, the application will generate a markdown README based on the user's responses to the inquirer prompts.  The README will also include the license badge selected during the prompts.
 
-The file that is saved will be the repo name plus README (i.e.  Readme-Generator-README).  This is done so that the current README file is not overwritten.  The user can rename the generated file when appropriate.
+Finally, the fs.writeFile is used to generate the temporary README. The file that is saved will be the repo name plus README (i.e.  Readme-Generator-README).  This is done so that the current README file is not overwritten.  The user can rename the generated file when appropriate.
 
 
 ### Link to video that you can download
